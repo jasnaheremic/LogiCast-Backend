@@ -22,4 +22,20 @@ public class WarehouseService(
             throw new Exception("Unable to create warehouse");
         }
     }
+
+    public async Task<List<WarehouseDto>> GetAllWarehousesAsync()
+    {
+        var warehouses = await warehouseRepository.GetAllWarehousesAsync();
+        return warehouses;
+    }
+
+    public async Task<WarehouseDto?> GetWarehouseByIdAsync(Guid warehouseId)
+    {
+        var warehouse = await warehouseRepository.GetWarehouseByIdAsync(warehouseId);
+        if (warehouse is null)
+        {
+            throw new Exception($"Warehouse with ID: {warehouseId} not found");
+        }
+        return warehouse;
+    }
 }

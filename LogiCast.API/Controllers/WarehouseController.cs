@@ -20,4 +20,24 @@ public class WarehouseController(
         return CreatedAtAction(nameof(CreateWarehouse), new { warehouseId = warehouseDto.Id }, warehouseDto);
     }
 
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<List<WarehouseDto>>> GetAllWarehousesAsync()
+    {
+        var warehouseDtos = await warehouseService.GetAllWarehousesAsync();
+        return Ok(warehouseDtos);
+    }
+
+    [HttpGet("{warehouseId:Guid}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<WarehouseDto?>> GetWarehouseByIdAsync(Guid warehouseId)
+    {
+        var warehouseDto = await warehouseService.GetWarehouseByIdAsync(warehouseId);
+        return Ok(warehouseDto);
+    }
+
 }
