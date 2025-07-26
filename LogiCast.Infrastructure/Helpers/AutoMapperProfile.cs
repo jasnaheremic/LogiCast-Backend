@@ -14,5 +14,7 @@ public class AutoMapperProfile : Profile
         CreateMap<Category, CategoryDto>().ReverseMap();
         CreateMap<Item, CreateItemDto>().ReverseMap();
         CreateMap<Item, ItemDto>().ReverseMap();
+        CreateMap<Inventory, CreateInventoryDto>().ReverseMap();
+        CreateMap<Inventory, InventoryDto>().ReverseMap();
     }
 }
