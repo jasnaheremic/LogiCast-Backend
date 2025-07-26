@@ -31,7 +31,7 @@ public class WarehouseService(
 
     public async Task<WarehouseDto?> GetWarehouseByIdAsync(Guid warehouseId)
     {
-        var warehouse = await warehouseRepository.GetWarehouseByIdAsync(warehouseId);
+        var warehouse = await warehouseRepository.GetWarehouseByIdAsync(warehouseId); 
         if (warehouse is null)
         {
             throw new Exception($"Warehouse with ID: {warehouseId} not found");

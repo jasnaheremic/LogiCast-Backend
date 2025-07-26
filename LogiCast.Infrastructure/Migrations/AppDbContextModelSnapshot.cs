@@ -52,10 +52,7 @@ namespace LogiCast.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("InventoryItemId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ItemId")
+                    b.Property<Guid>("ItemId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("LastUpdated")
@@ -64,8 +61,17 @@ namespace LogiCast.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("WarehouseId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("maxValue")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("minValue")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -96,9 +102,11 @@ namespace LogiCast.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("Unit")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -127,19 +135,21 @@ namespace LogiCast.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UsedCapacity")
+                    b.Property<int?>("UsedCapacity")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Warehouses");
+                    b.ToTable("Warehouse");
                 });
 
             modelBuilder.Entity("LogiCast.Domain.Models.Inventory", b =>
                 {
                     b.HasOne("LogiCast.Domain.Models.Item", null)
                         .WithMany("InventoryRecords")
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("LogiCast.Domain.Models.Warehouse", "Warehouse")
                         .WithMany("InventoryItems")

@@ -32,6 +32,10 @@ builder.Services.AddAutoMapper(cfg =>
 // Add services to the container.
 builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IItemRepositroy, ItemRepository>();
+builder.Services.AddScoped<IItemService, ItemService>();
 
 // Add other necessary services
 builder.Services.AddControllers();

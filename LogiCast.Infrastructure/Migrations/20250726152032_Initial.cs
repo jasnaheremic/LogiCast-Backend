@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LogiCast.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,19 +26,19 @@ namespace LogiCast.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Warehouses",
+                name: "Warehouse",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Location = table.Column<string>(type: "text", nullable: false),
                     MaxCapacity = table.Column<int>(type: "integer", nullable: false),
-                    UsedCapacity = table.Column<int>(type: "integer", nullable: false),
+                    UsedCapacity = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Warehouses", x => x.Id);
+                    table.PrimaryKey("PK_Warehouse", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,8 +48,9 @@ namespace LogiCast.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Unit = table.Column<string>(type: "text", nullable: false),
+                    Unit = table.Column<int>(type: "integer", nullable: false),
                     Barcode = table.Column<string>(type: "text", nullable: false),
+                    Price = table.Column<double>(type: "double precision", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -69,10 +70,12 @@ namespace LogiCast.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     WarehouseId = table.Column<Guid>(type: "uuid", nullable: false),
-                    InventoryItemId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
+                    maxValue = table.Column<int>(type: "integer", nullable: false),
+                    minValue = table.Column<int>(type: "integer", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -82,11 +85,12 @@ namespace LogiCast.Infrastructure.Migrations
                         name: "FK_Inventory_Item_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Item",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Inventory_Warehouses_WarehouseId",
+                        name: "FK_Inventory_Warehouse_WarehouseId",
                         column: x => x.WarehouseId,
-                        principalTable: "Warehouses",
+                        principalTable: "Warehouse",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -117,7 +121,7 @@ namespace LogiCast.Infrastructure.Migrations
                 name: "Item");
 
             migrationBuilder.DropTable(
-                name: "Warehouses");
+                name: "Warehouse");
 
             migrationBuilder.DropTable(
                 name: "Category");
