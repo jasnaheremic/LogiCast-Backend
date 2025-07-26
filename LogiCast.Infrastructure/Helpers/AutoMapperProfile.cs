@@ -10,5 +10,9 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Warehouse, CreateWarehouseDto>().ReverseMap();
         CreateMap<Warehouse, WarehouseDto>().ReverseMap();
+        CreateMap<Category, CreateCategoryDto>().ReverseMap();
+        CreateMap<Category, CategoryDto>().ReverseMap();
+        CreateMap<Item, CreateItemDto>().ReverseMap();
+        CreateMap<Item, ItemDto>().ReverseMap();
     }
 }
