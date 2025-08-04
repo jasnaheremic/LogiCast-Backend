@@ -12,4 +12,5 @@ public class Inventory : BaseModel
     public required int minValue { get; set; }
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
     public required Warehouse Warehouse { get; set; }
+    public required Item Item { get; set; }  
 }
