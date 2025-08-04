@@ -6,7 +6,7 @@ namespace LogiCast.Domain.Enums;
 public enum ItemStatus
 {
     BelowMin,
-    High,
     Normal,
-    Max
+    Max,
+    Alert
 }
