@@ -83,6 +83,19 @@ public class InventoryService(
 
     return totalInventory;
    }
+   
+   public async Task<InventoryDashboardDto> GetInventoryDashboardAsync()
+   {
+       var inventoryDashboardDto = new InventoryDashboardDto
+       {
+           TotalInventoryValue = await inventoryRepository.GetTotalInventoryValueAsync(),
+           LowStockItemsCount = await inventoryRepository.GetLowStockItemsCountAsync(),
+           TotalCategoriesCount = await inventoryRepository.GetTotalCategoriesCountAsync(),
+           TotalItemsCount = await inventoryRepository.GetTotalItemsCountAsync()
+       };
+
+       return inventoryDashboardDto;
+   }
 
    private string CalculateStatus(int quantity, int min, int max)
    {
