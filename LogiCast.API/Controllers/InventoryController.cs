@@ -38,4 +38,14 @@ public class InventoryController(IInventoryService inventoryService) : Controlle
         var inventoryItemsDto = await inventoryService.GetAllInventoryAsync();
         return Ok(inventoryItemsDto);
     }
+    
+    [HttpGet("overview")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<InventoryDashboardDto>> GetDashboard()
+    {
+        var inventoryDashboardDto = await inventoryService.GetInventoryDashboardAsync();
+        return Ok(inventoryDashboardDto);
+    }
 }
