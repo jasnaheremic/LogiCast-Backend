@@ -30,4 +30,12 @@ public class WarehouseRepository(
         var warehouse = await appDbContext.Warehouse.FirstOrDefaultAsync(w => w.Id == warehouseId);
         return mapper.Map<WarehouseDto?>(warehouse);
     }
+
+    public async Task<List<WarehouseDto>> GetAllWarehousesWithInventoryAsync()
+    {
+        var warehousesWithInventory = await appDbContext.Warehouse
+            .Include(w => w.InventoryItems)
+            .ToListAsync();
+        return mapper.Map<List<WarehouseDto>>(warehousesWithInventory);
+    }
 }

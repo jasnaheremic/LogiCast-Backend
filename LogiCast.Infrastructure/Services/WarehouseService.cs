@@ -38,4 +38,31 @@ public class WarehouseService(
         }
         return warehouse;
     }
+
+    public async Task<List<WarehouseCapacityDto>> GetTopThreeWarehousesByCapacityAsync()
+    {
+        var warehouses = await warehouseRepository.GetAllWarehousesWithInventoryAsync();
+
+        var topThree = warehouses
+            .Select(w =>
+            {
+                int usedCapacity = w.InventoryItems.Sum(i => i.Quantity);
+                double percentage = w.MaxCapacity == 0 ? 0 : (usedCapacity * 100.0) / w.MaxCapacity;
+
+                return new WarehouseCapacityDto
+                {
+                    Id = w.Id,
+                    Name = w.Name,
+                    Location = w.Location,
+                    MaxCapacity = w.MaxCapacity,
+                    UsedCapacity = usedCapacity,
+                    CapacityUsagePercent = Math.Round(percentage, 2)
+                };
+            })
+            .OrderByDescending(w => w.CapacityUsagePercent)
+            .Take(3)
+            .ToList();
+
+        return topThree;    
+    }
 }
