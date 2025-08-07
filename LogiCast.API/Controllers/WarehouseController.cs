@@ -39,5 +39,15 @@ public class WarehouseController(
         var warehouseDto = await warehouseService.GetWarehouseByIdAsync(warehouseId);
         return Ok(warehouseDto);
     }
+    
+    [HttpGet("top-capacity")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetTopThreeWarehousesByCapacity()
+    {
+        var topWarehouses = await warehouseService.GetTopThreeWarehousesByCapacityAsync();
+        return Ok(topWarehouses);
+    }
 
 }

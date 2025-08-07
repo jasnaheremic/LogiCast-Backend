@@ -7,4 +7,6 @@ public interface IWarehouseRepository
     Task<WarehouseDto> CreateWarehouseAsync(CreateWarehouseDto createWarehouseDto);
     Task<List<WarehouseDto>> GetAllWarehousesAsync();
     Task<WarehouseDto?> GetWarehouseByIdAsync(Guid warehouseId);
+    Task<List<WarehouseDto>> GetAllWarehousesWithInventoryAsync();
+
 }
