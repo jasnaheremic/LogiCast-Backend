@@ -8,4 +8,6 @@ public interface IInventoryService
     Task<IEnumerable<WarehouseInventoryDto>> GetInventoryByWarehouseIdAsync(Guid warehouseId);
     Task<IEnumerable<TotalInventoryDto>> GetAllInventoryAsync();
     Task<InventoryDashboardDto> GetInventoryDashboardAsync();
+    Task<List<CategorySumDto>> GetTopThreeCategoriesAsync();
+    Task<IEnumerable<LowStockItemDto>> GetLowStockItemsAsync();
 }

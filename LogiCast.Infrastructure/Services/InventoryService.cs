@@ -97,6 +97,18 @@ public class InventoryService(
        return inventoryDashboardDto;
    }
 
+   public async Task<List<CategorySumDto>> GetTopThreeCategoriesAsync()
+   {
+       var allCategories = await inventoryRepository.GetCategorySumValuesAsync();
+       return allCategories.Take(3).ToList();
+   }
+
+   public async Task<IEnumerable<LowStockItemDto>> GetLowStockItemsAsync()
+   {
+       var lowStockItems = await inventoryRepository.GetLowStockItemsAsync();
+       return lowStockItems;
+   }
+
    private string CalculateStatus(int quantity, int min, int max)
    {
        if (quantity == 0)

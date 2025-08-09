@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using LogiCast.Domain.DTOs;
 using LogiCast.Domain.Interfaces;
 using LogiCast.Domain.Models;
@@ -61,5 +62,37 @@ public class InventoryRepository(
     public async Task<int> GetTotalItemsCountAsync()
     {
         return await appDbContext.Inventory.SumAsync(i => i.Quantity);
+    }
+
+    public async Task<List<CategorySumDto>> GetCategorySumValuesAsync()
+    {
+        var categorySumValues = await appDbContext.Inventory
+            .Where(i => i.Item.Category != null)
+            .GroupBy(i => new
+            {
+                i.Item.Category!.Id,
+                i.Item.Category.Name
+            })
+            .Select(g => new CategorySumDto
+            {
+                CategoryId = g.Key.Id,
+                CategoryName = g.Key.Name,
+                TotalValue = g.Sum(i => i.Item.Price * i.Quantity)
+            })
+            .OrderByDescending(c => c.TotalValue)
+            .ToListAsync();
+        
+        return categorySumValues;
+    }
+
+    public async Task<IEnumerable<LowStockItemDto>> GetLowStockItemsAsync()
+    {
+        var inventoryItems = await appDbContext.Inventory
+            .Include(i => i.Warehouse)
+            .Include(i => i.Item)
+            .Where(i => i.Quantity < i.minValue)
+            .ToListAsync();
+
+        return mapper.Map<IEnumerable<LowStockItemDto>>(inventoryItems);
     }
 }
