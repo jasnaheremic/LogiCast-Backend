@@ -34,5 +34,12 @@ public class AutoMapperProfile : Profile
                             ? ItemStatus.Max.ToString()
                             : ItemStatus.Normal.ToString()
             ));
+        CreateMap<Inventory, LowStockItemDto>()
+            .ForMember(dest => dest.WarehouseId, opt => opt.MapFrom(src => src.WarehouseId))
+            .ForMember(dest => dest.WarehouseName, opt => opt.MapFrom(src => src.Warehouse.Name))
+            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
+            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.Item.Name))
+            .ForMember(dest => dest.CurrentStock, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.ReorderQuantity, opt => opt.MapFrom(src => src.maxValue - src.Quantity));
     }
 }

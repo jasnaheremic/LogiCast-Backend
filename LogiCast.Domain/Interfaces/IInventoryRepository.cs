@@ -12,4 +12,6 @@ public interface IInventoryRepository
     Task<int> GetLowStockItemsCountAsync();
     Task<int> GetTotalCategoriesCountAsync();
     Task<int> GetTotalItemsCountAsync();
+    Task<List<CategorySumDto>> GetCategorySumValuesAsync();
+    Task<IEnumerable<LowStockItemDto>> GetLowStockItemsAsync();
 }

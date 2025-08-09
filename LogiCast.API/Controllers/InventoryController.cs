@@ -48,4 +48,24 @@ public class InventoryController(IInventoryService inventoryService) : Controlle
         var inventoryDashboardDto = await inventoryService.GetInventoryDashboardAsync();
         return Ok(inventoryDashboardDto);
     }
+    
+    [HttpGet("top-three-categories")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<CategorySumDto>> GetTopThreeCategories()
+    {
+        var topThreeCategories = await inventoryService.GetTopThreeCategoriesAsync();
+        return Ok(topThreeCategories);
+    }
+    
+    [HttpGet("low-stock")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<List<LowStockItemDto>>> GetLowStockItems()
+    {
+        var result = await inventoryService.GetLowStockItemsAsync();
+        return Ok(result);
+    }
 }
