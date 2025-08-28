@@ -95,4 +95,43 @@ public class InventoryRepository(
 
         return mapper.Map<IEnumerable<LowStockItemDto>>(inventoryItems);
     }
+
+    public async Task<bool> DeleteInventoryItemFromWarehouseAsync(Guid warehouseId, Guid itemId)
+    {
+        var inventoryItem = await appDbContext.Inventory
+            .FirstOrDefaultAsync(i => i.WarehouseId == warehouseId && i.ItemId == itemId);
+
+        if (inventoryItem == null)
+            return false;
+
+        appDbContext.Inventory.Remove(inventoryItem);
+        await appDbContext.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<InventoryDto?> UpdateInventoryAsync(Guid warehouseId, Guid itemId, UpdateInventoryDto updateDto)
+    {
+        var existingInventory = await appDbContext.Inventory
+            .FirstOrDefaultAsync(inv => inv.WarehouseId == warehouseId && inv.ItemId == itemId);
+
+        if (existingInventory == null)
+            return null;
+
+        existingInventory.Quantity = updateDto.Quantity;
+        existingInventory.maxValue = updateDto.MaxValue;
+        existingInventory.minValue = updateDto.MinValue;
+
+        appDbContext.Inventory.Update(existingInventory);
+        await appDbContext.SaveChangesAsync();
+
+        return new InventoryDto
+        {
+            Id = existingInventory.Id,
+            WarehouseId = existingInventory.WarehouseId,
+            ItemId = existingInventory.ItemId,
+            Quantity = existingInventory.Quantity,
+            maxValue = existingInventory.maxValue,
+            minValue = existingInventory.minValue
+        };
+    }
 }

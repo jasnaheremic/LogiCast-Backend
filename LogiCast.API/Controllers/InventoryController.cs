@@ -68,4 +68,33 @@ public class InventoryController(IInventoryService inventoryService) : Controlle
         var result = await inventoryService.GetLowStockItemsAsync();
         return Ok(result);
     }
+    
+    [HttpDelete("{warehouseId:guid}/item/{itemId:guid}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteInventoryItem(Guid warehouseId, Guid itemId)
+    {
+        var result = await inventoryService.DeleteInventoryItemFromWarehouseAsync(warehouseId, itemId);
+
+        if (!result)
+            return NotFound(new { message = "Item not found in this warehouse" });
+
+        return NoContent();
+    }
+    
+    [HttpPut("{warehouseId}/item/{itemId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateInventory(Guid warehouseId, Guid itemId, [FromBody] UpdateInventoryDto updateDto)
+    {
+        var result = await inventoryService.UpdateInventoryAsync(warehouseId, itemId, updateDto);
+
+        if (result == null)
+        {
+            return NotFound(new { message = $"Inventory record for warehouse {warehouseId} and item {itemId} not found." });
+        }
+
+        return Ok(result);
+    }
 }

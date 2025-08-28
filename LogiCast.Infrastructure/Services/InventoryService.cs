@@ -39,6 +39,8 @@ public class InventoryService(
            ItemName = i.Item.Name,
            CategoryName = i.Item.Category?.Name ?? "Unknown",
            Quantity = i.Quantity,
+           MaxValue = i.maxValue,
+           MinValue = i.minValue,
            Price = i.Item.Price,
            Status = CalculateStatus(i.Quantity, i.minValue, i.maxValue)
        });
@@ -107,6 +109,16 @@ public class InventoryService(
    {
        var lowStockItems = await inventoryRepository.GetLowStockItemsAsync();
        return lowStockItems;
+   }
+
+   public async Task<bool> DeleteInventoryItemFromWarehouseAsync(Guid warehouseId, Guid itemId)
+   {
+       return await inventoryRepository.DeleteInventoryItemFromWarehouseAsync(warehouseId, itemId);
+   }
+
+   public async Task<InventoryDto?> UpdateInventoryAsync(Guid warehouseId, Guid itemId, UpdateInventoryDto updateDto)
+   {
+       return await inventoryRepository.UpdateInventoryAsync(warehouseId, itemId, updateDto);
    }
 
    private string CalculateStatus(int quantity, int min, int max)

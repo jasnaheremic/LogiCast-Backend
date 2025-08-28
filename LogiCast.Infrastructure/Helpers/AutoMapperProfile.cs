@@ -24,6 +24,8 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.Item.Name))
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Item.Category != null ? src.Item.Category.Name : "Unknown"))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.MinValue, opt => opt.MapFrom(src => src.minValue))
+            .ForMember(dest => dest.MaxValue, opt => opt.MapFrom(src => src.maxValue))
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Item.Price))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src =>
                 src.Quantity == 0
