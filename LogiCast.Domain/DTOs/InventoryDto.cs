@@ -13,5 +13,5 @@ public class InventoryDto
     public required int maxValue { get; set; }
     public required int minValue { get; set; }
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
-    public required Item Item { get; set; } 
+    public Item Item { get; set; } 
 }

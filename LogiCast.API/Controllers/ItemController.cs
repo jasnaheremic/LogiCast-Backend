@@ -38,4 +38,35 @@ public class ItemController(IItemService itemService) : ControllerBase
         var itemDto = await itemService.GetItemByIdAsync(itemId);
         return Ok(itemDto);
     }
+    
+    [HttpDelete("{itemId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteWarehouse(Guid itemId)
+    {
+        var result = await itemService.DeleteItemByItemIdAsync(itemId);
+
+        if (!result)
+        {
+            return NotFound(new { message = $"Item with id {itemId} not found." });
+        }
+
+        return NoContent();
+    }
+    
+    [HttpPut("{itemId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateItem(Guid itemId, [FromBody] CreateItemDto updateItemDto)
+    {
+        var result = await itemService.UpdateItemByItemIdAsync(itemId, updateItemDto);
+
+        if (result == null)
+        {
+            return NotFound(new { message = $"Item with id {itemId} not found." });
+        }
+
+        return Ok(result);
+    }
 }

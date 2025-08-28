@@ -25,10 +25,10 @@ public class WarehouseRepository(
         return mapper.Map<List<WarehouseDto>>(warehouses);
     }
     
-    public async Task<WarehouseDto?> GetWarehouseByIdAsync(Guid warehouseId)
+    public async Task<Warehouse?> GetWarehouseByIdAsync(Guid warehouseId)
     {
         var warehouse = await appDbContext.Warehouse.FirstOrDefaultAsync(w => w.Id == warehouseId);
-        return mapper.Map<WarehouseDto?>(warehouse);
+        return mapper.Map<Warehouse?>(warehouse);
     }
 
     public async Task<List<WarehouseDto>> GetAllWarehousesWithInventoryAsync()
@@ -37,5 +37,50 @@ public class WarehouseRepository(
             .Include(w => w.InventoryItems)
             .ToListAsync();
         return mapper.Map<List<WarehouseDto>>(warehousesWithInventory);
+    }
+
+    public async Task DeleteWarehouseAsync(Warehouse warehouse)
+    {
+        var relatedInventories = await appDbContext.Inventory
+            .Where(inv => inv.WarehouseId == warehouse.Id)
+            .ToListAsync();
+
+        if (relatedInventories.Any())
+        {
+            appDbContext.Inventory.RemoveRange(relatedInventories);
+        }
+
+        appDbContext.Warehouse.Remove(warehouse);
+        await appDbContext.SaveChangesAsync();
+    }
+
+    public async Task<WarehouseDto?> UpdateWarehouseAsync(Guid warehouseId, UpdateWarehouseDto updateDto)
+    {
+        var existingWarehouse = await appDbContext.Warehouse.FirstOrDefaultAsync(w => w.Id == warehouseId);
+
+        if (existingWarehouse == null)
+            return null;
+
+        existingWarehouse.Name = updateDto.Name;
+        existingWarehouse.Location = updateDto.Location;
+        existingWarehouse.MaxCapacity = updateDto.MaxCapacity;
+
+        appDbContext.Warehouse.Update(existingWarehouse);
+        await appDbContext.SaveChangesAsync();
+
+        return new WarehouseDto
+        {
+            Id = existingWarehouse.Id,
+            Name = existingWarehouse.Name,
+            Location = existingWarehouse.Location,
+            MaxCapacity = existingWarehouse.MaxCapacity,
+            UsedCapacity = existingWarehouse.UsedCapacity,
+            InventoryItems = existingWarehouse.InventoryItems.Select(inv => new WarehouseInventoryDto
+            {
+                ItemId = inv.ItemId,
+                Quantity = inv.Quantity,
+                // map other fields if needed
+            }).ToList()
+        };
     }
 }

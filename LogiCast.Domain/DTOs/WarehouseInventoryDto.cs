@@ -7,6 +7,9 @@ public class WarehouseInventoryDto
     public string ItemName { get; set; }
     public string CategoryName { get; set; }
     public int Quantity { get; set; }
+    public int MinValue { get; set; }
+    public int MaxValue { get; set; }
+
     public string Status { get; set; }
     public double Price { get; set; } 
 }

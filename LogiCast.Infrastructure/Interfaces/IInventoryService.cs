@@ -10,4 +10,7 @@ public interface IInventoryService
     Task<InventoryDashboardDto> GetInventoryDashboardAsync();
     Task<List<CategorySumDto>> GetTopThreeCategoriesAsync();
     Task<IEnumerable<LowStockItemDto>> GetLowStockItemsAsync();
+    Task<bool> DeleteInventoryItemFromWarehouseAsync(Guid warehouseId, Guid itemId);
+    Task<InventoryDto?> UpdateInventoryAsync(Guid warehouseId, Guid itemId, UpdateInventoryDto updateDto); // new
+
 }

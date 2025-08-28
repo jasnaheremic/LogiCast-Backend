@@ -14,4 +14,6 @@ public interface IInventoryRepository
     Task<int> GetTotalItemsCountAsync();
     Task<List<CategorySumDto>> GetCategorySumValuesAsync();
     Task<IEnumerable<LowStockItemDto>> GetLowStockItemsAsync();
+    Task<bool> DeleteInventoryItemFromWarehouseAsync(Guid warehouseId, Guid itemId);
+    Task<InventoryDto?> UpdateInventoryAsync(Guid warehouseId, Guid itemId, UpdateInventoryDto updateDto); // new
 }

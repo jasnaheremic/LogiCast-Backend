@@ -49,5 +49,35 @@ public class WarehouseController(
         var topWarehouses = await warehouseService.GetTopThreeWarehousesByCapacityAsync();
         return Ok(topWarehouses);
     }
+    
+    [HttpDelete("{warehouseId:guid}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteWarehouse(Guid warehouseId)
+    {
+        var result = await warehouseService.DeleteWarehouseByIdAsync(warehouseId);
 
+        if (!result)
+        {
+            return NotFound(new { message = $"Warehouse with id {warehouseId} not found." });
+        }
+
+        return NoContent();
+    }
+    
+    [HttpPut("{warehouseId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateWarehouse(Guid warehouseId, [FromBody] UpdateWarehouseDto updateDto)
+    {
+        var result = await warehouseService.UpdateWarehouseAsync(warehouseId, updateDto);
+
+        if (result == null)
+        {
+            return NotFound(new { message = $"Warehouse with id {warehouseId} not found." });
+        }
+
+        return Ok(result);
+    }
 }

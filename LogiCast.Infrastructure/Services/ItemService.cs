@@ -1,5 +1,6 @@
 using LogiCast.Domain.DTOs;
 using LogiCast.Domain.Interfaces;
+using LogiCast.Domain.Models;
 using LogiCast.Infrastructure.Data;
 using LogiCast.Infrastructure.Interfaces;
 
@@ -29,7 +30,7 @@ public class ItemService(
         return items;
     }
 
-    public async Task<ItemDto?> GetItemByIdAsync(Guid itemId)
+    public async Task<Item?> GetItemByIdAsync(Guid itemId)
     {
         var item = await itemRepository.GetItemByIdAsync(itemId); 
         if (item is null)
@@ -37,5 +38,25 @@ public class ItemService(
             throw new Exception($"Item with ID: {itemId} not found");
         }
         return item;
+    }
+
+    public async Task<bool> DeleteItemByItemIdAsync(Guid itemId)
+    {
+        var item = await itemRepository.GetItemByIdAsync(itemId);
+
+        if (item == null)
+        {
+            return false;
+        }
+
+        await itemRepository.DeleteItemAsync(item);
+        await appDbContext.SaveChangesAsync();
+        
+        return true;
+    }
+
+    public async Task<ItemDto?> UpdateItemByItemIdAsync(Guid itemId, CreateItemDto updateItemDto)
+    {
+        return await itemRepository.UpdateItemAsync(itemId, updateItemDto);
     }
 }

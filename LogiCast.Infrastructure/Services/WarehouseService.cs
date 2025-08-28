@@ -1,5 +1,6 @@
 ﻿using LogiCast.Domain.DTOs;
 using LogiCast.Domain.Interfaces;
+using LogiCast.Domain.Models;
 using LogiCast.Infrastructure.Data;
 using LogiCast.Infrastructure.Interfaces;
 
@@ -29,7 +30,7 @@ public class WarehouseService(
         return warehouses;
     }
 
-    public async Task<WarehouseDto?> GetWarehouseByIdAsync(Guid warehouseId)
+    public async Task<Warehouse?> GetWarehouseByIdAsync(Guid warehouseId)
     {
         var warehouse = await warehouseRepository.GetWarehouseByIdAsync(warehouseId); 
         if (warehouse is null)
@@ -64,5 +65,25 @@ public class WarehouseService(
             .ToList();
 
         return topThree;    
+    }
+
+    public async Task<bool> DeleteWarehouseByIdAsync(Guid warehouseId)
+    {
+        var warehouse = await warehouseRepository.GetWarehouseByIdAsync(warehouseId);
+
+        if (warehouse == null)
+        {
+            return false;
+        }
+
+        await warehouseRepository.DeleteWarehouseAsync(warehouse);
+        await appDbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<WarehouseDto?> UpdateWarehouseAsync(Guid warehouseId, UpdateWarehouseDto updateDto)
+    {
+        return await warehouseRepository.UpdateWarehouseAsync(warehouseId, updateDto);
     }
 }
