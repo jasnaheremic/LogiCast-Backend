@@ -7,7 +7,7 @@ namespace LogiCast.API.Controllers;
 [Route("api/warehouse")]
 [ApiController]
 public class WarehouseController(
-    IWarehouseService warehouseService) : ControllerBase
+    IWarehouseService warehouseService, IInventoryService inventoryService, IInventoryReportService inventoryReportService) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -79,5 +79,37 @@ public class WarehouseController(
         }
 
         return Ok(result);
+    }
+    
+    [HttpGet("{warehouseId:Guid}/pdf")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetWarehouseInventoryPdf(Guid warehouseId)
+    {
+        var inventoryItems = await inventoryService.GetInventoryByWarehouseIdAsync(warehouseId);
+        var warehouse = await warehouseService.GetWarehouseByIdAsync(warehouseId);
+
+        if (warehouse == null || inventoryItems == null)
+            return NotFound();
+
+        // Map to report DTO
+        var reportDto = new InventoryReportDto
+        {
+            WarehouseName = warehouse.Name,
+            WarehouseLocation = warehouse.Location,
+            PrintedAt = DateTime.UtcNow,
+            Items = inventoryItems.Select(i => new InventoryItemReportDto
+            {
+                Barcode = i.Barcode,
+                ItemName = i.ItemName,
+                Unit = i.Unit,
+                Quantity = i.Quantity,
+                Price = i.Price
+            }).ToList()
+        };
+
+        var pdfBytes = inventoryReportService.GenerateInventoryReport(reportDto);
+
+        return File(pdfBytes, "application/pdf", $"{warehouse.Name}_Inventory_{DateTime.UtcNow:yyyyMMdd}.pdf");
     }
 }

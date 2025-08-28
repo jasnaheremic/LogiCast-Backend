@@ -5,6 +5,7 @@ using LogiCast.Infrastructure.Interfaces;
 using LogiCast.Infrastructure.Repositories;
 using LogiCast.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,9 @@ builder.Services.AddScoped<IItemRepositroy, ItemRepository>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IInventoryReportService, InventoryReportService>();
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 // Add other necessary services
 builder.Services.AddControllers();

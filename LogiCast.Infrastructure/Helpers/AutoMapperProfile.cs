@@ -21,6 +21,7 @@ public class AutoMapperProfile : Profile
         CreateMap<Inventory, WarehouseInventoryDto>()
             .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.Item.Id))
             .ForMember(dest => dest.Barcode, opt => opt.MapFrom(src => src.Item.Barcode))
+            .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Item.Unit))
             .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.Item.Name))
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Item.Category != null ? src.Item.Category.Name : "Unknown"))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))

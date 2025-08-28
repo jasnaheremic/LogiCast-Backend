@@ -1,9 +1,12 @@
+using LogiCast.Domain.Enums;
+
 namespace LogiCast.Domain.DTOs;
 
 public class WarehouseInventoryDto
 {
     public Guid ItemId { get; set; }
     public string Barcode { get; set; }
+    public ItemUnit Unit { get; set; }
     public string ItemName { get; set; }
     public string CategoryName { get; set; }
     public int Quantity { get; set; }
