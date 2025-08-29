@@ -1,4 +1,5 @@
-﻿using LogiCast.Domain.DTOs;
+﻿using FluentValidation;
+using LogiCast.Domain.DTOs;
 using LogiCast.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,10 @@ namespace LogiCast.API.Controllers;
 [Route("api/warehouse")]
 [ApiController]
 public class WarehouseController(
-    IWarehouseService warehouseService, IInventoryService inventoryService, IInventoryReportService inventoryReportService) : ControllerBase
+    IWarehouseService warehouseService, 
+    IInventoryService inventoryService,
+    IInventoryReportService inventoryReportService, 
+    IValidator<CreateWarehouseDto> validator) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -16,6 +20,11 @@ public class WarehouseController(
     public async Task<ActionResult<CreateWarehouseDto>> CreateWarehouse(
         [FromBody] CreateWarehouseDto createWarehouseDto)
     {
+        var validationResult = await validator.ValidateAsync(createWarehouseDto);
+        if (validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
         var warehouseDto = await warehouseService.CreateWarehouseAsync(createWarehouseDto);
         return CreatedAtAction(nameof(CreateWarehouse), new { warehouseId = warehouseDto.Id }, warehouseDto);
     }

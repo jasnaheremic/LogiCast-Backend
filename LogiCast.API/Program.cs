@@ -1,9 +1,12 @@
+using FluentValidation;
+using LogiCast.Domain.DTOs;
 using LogiCast.Domain.Interfaces;
 using LogiCast.Infrastructure.Data;
 using LogiCast.Infrastructure.Helpers;
 using LogiCast.Infrastructure.Interfaces;
 using LogiCast.Infrastructure.Repositories;
 using LogiCast.Infrastructure.Services;
+using LogiCast.Infrastructure.Validators;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 
@@ -40,6 +43,13 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IInventoryReportService, InventoryReportService>();
+
+builder.Services.AddScoped<IValidator<CreateItemDto>, CreateItemValidator>();
+builder.Services.AddScoped<IValidator<CreateWarehouseDto>, CreateWarehouseValidator>();
+builder.Services.AddScoped<IValidator<CreateInventoryDto>, CreateInventoryValidator>();
+
+
+
 
 QuestPDF.Settings.License = LicenseType.Community;
 

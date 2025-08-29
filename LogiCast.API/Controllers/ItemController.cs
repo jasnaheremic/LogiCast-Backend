@@ -1,3 +1,4 @@
+using FluentValidation;
 using LogiCast.Domain.DTOs;
 using LogiCast.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ namespace LogiCast.API.Controllers;
 
 [Route("api/item")]
 [ApiController]
-public class ItemController(IItemService itemService) : ControllerBase
+public class ItemController(IItemService itemService, IValidator<CreateItemDto> validator) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -15,6 +16,11 @@ public class ItemController(IItemService itemService) : ControllerBase
     public async Task<ActionResult<CreateItemDto>> CreateItem(
         [FromBody] CreateItemDto createItemDto)
     {
+        var validationResult = await validator.ValidateAsync(createItemDto);
+        if (validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
         var itemDto = await itemService.CreateItemAsync(createItemDto);
         return CreatedAtAction(nameof(CreateItem), new { itemId = itemDto.Id }, itemDto);
     }
