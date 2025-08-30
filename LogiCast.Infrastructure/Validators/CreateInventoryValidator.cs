@@ -3,7 +3,7 @@ using LogiCast.Domain.DTOs;
 
 public class CreateInventoryValidator : AbstractValidator<CreateInventoryDto>
 {
-    public CreateInventoryValidator()
+   /* public CreateInventoryValidator()
     {
         RuleFor(x => x.WarehouseId)
             .NotEmpty().WithMessage("WarehouseId is required.");
@@ -23,5 +23,5 @@ public class CreateInventoryValidator : AbstractValidator<CreateInventoryDto>
             .GreaterThanOrEqualTo(0).WithMessage("Quantity cannot be negative.")
             .LessThanOrEqualTo(x => x.maxValue)
             .WithMessage("Quantity cannot exceed max value.");
-    }
+    }*/
 }

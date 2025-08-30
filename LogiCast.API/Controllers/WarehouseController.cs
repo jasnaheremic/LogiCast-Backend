@@ -20,11 +20,6 @@ public class WarehouseController(
     public async Task<ActionResult<CreateWarehouseDto>> CreateWarehouse(
         [FromBody] CreateWarehouseDto createWarehouseDto)
     {
-        var validationResult = await validator.ValidateAsync(createWarehouseDto);
-        if (validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
         var warehouseDto = await warehouseService.CreateWarehouseAsync(createWarehouseDto);
         return CreatedAtAction(nameof(CreateWarehouse), new { warehouseId = warehouseDto.Id }, warehouseDto);
     }

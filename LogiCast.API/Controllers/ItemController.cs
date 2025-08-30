@@ -16,11 +16,6 @@ public class ItemController(IItemService itemService, IValidator<CreateItemDto> 
     public async Task<ActionResult<CreateItemDto>> CreateItem(
         [FromBody] CreateItemDto createItemDto)
     {
-        var validationResult = await validator.ValidateAsync(createItemDto);
-        if (validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
         var itemDto = await itemService.CreateItemAsync(createItemDto);
         return CreatedAtAction(nameof(CreateItem), new { itemId = itemDto.Id }, itemDto);
     }

@@ -19,11 +19,6 @@ public class InventoryController(
     public async Task<ActionResult<CreateInventoryDto>> CreateInventory(
         [FromBody] CreateInventoryDto createInventoryDto)
     {
-        var validationResult = await validator.ValidateAsync(createInventoryDto);
-        if (validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
         var inventoryDto = await inventoryService.CreateInventoryAsync(createInventoryDto);
         return CreatedAtAction(nameof(CreateInventory), new { inventoryId = inventoryDto.Id }, inventoryDto);
     }

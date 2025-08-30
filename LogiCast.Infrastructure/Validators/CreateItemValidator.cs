@@ -7,7 +7,7 @@ public class CreateItemValidator : AbstractValidator<CreateItemDto>
 {
     private readonly AppDbContext _dbContext;
 
-    public CreateItemValidator(AppDbContext dbContext)
+   /* public CreateItemValidator(AppDbContext dbContext)
     {
         _dbContext = dbContext;
 
@@ -26,5 +26,5 @@ public class CreateItemValidator : AbstractValidator<CreateItemDto>
     private async Task<bool> BeUniqueName(string name, CancellationToken cancellationToken)
     {
         return !await _dbContext.Item.AnyAsync(i => i.Name == name, cancellationToken);
-    }
+    }*/
 }

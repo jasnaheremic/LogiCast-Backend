@@ -9,7 +9,7 @@ public class CreateWarehouseValidator : AbstractValidator<CreateWarehouseDto>
 {
     private readonly AppDbContext appDbContext;
 
-    public CreateWarehouseValidator(AppDbContext appDbContext)
+   /* public CreateWarehouseValidator(AppDbContext appDbContext)
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Warehouse name is required.")
@@ -26,5 +26,5 @@ public class CreateWarehouseValidator : AbstractValidator<CreateWarehouseDto>
     private async Task<bool> BeUniqueName(string name, CancellationToken cancellationToken)
     {
         return !await appDbContext.Warehouse.AnyAsync(w => w.Name == name, cancellationToken);
-    }
+    }*/
 }
