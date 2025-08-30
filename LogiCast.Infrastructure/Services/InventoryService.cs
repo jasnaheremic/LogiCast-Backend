@@ -37,6 +37,7 @@ public class InventoryService(
            ItemId = i.Item.Id,
            Barcode = i.Item.Barcode,
            ItemName = i.Item.Name,
+           Unit = i.Item.Unit,
            CategoryName = i.Item.Category?.Name ?? "Unknown",
            Quantity = i.Quantity,
            MaxValue = i.maxValue,

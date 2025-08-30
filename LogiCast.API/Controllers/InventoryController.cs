@@ -1,3 +1,4 @@
+using FluentValidation;
 using LogiCast.Domain.DTOs;
 using LogiCast.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,10 @@ namespace LogiCast.API.Controllers;
 
 [Route("api/inventory")]
 [ApiController]
-public class InventoryController(IInventoryService inventoryService) : ControllerBase
+public class InventoryController(
+    IInventoryService inventoryService, 
+    IValidator<CreateInventoryDto> validator
+    ) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]

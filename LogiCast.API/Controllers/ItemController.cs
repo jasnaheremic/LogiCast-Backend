@@ -1,3 +1,4 @@
+using FluentValidation;
 using LogiCast.Domain.DTOs;
 using LogiCast.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ namespace LogiCast.API.Controllers;
 
 [Route("api/item")]
 [ApiController]
-public class ItemController(IItemService itemService) : ControllerBase
+public class ItemController(IItemService itemService, IValidator<CreateItemDto> validator) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
